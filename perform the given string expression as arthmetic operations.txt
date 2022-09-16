@@ -1,0 +1,88 @@
+                                                Arithmetic Expression using Stack
+
+
+public class function{
+	
+	static Stack<Integer> n = new Stack();
+	static Stack<Character> op = new Stack();
+	
+	static int precedence(char t) {
+		switch(t) {
+		case '+':
+		case '-':
+			return 1;
+		case '*':
+		case '/':
+			return 2;
+		case '%':
+			return 3;
+		}
+		return -1;
+	}
+	
+	static int callsum(int a,char t,int b) {
+		switch(t) {
+		case '+':
+			return b+a;//3+7
+		case '-':
+			return b-a;//
+		case '*':
+			return b*a;//
+		case '/':
+			return b/a;
+		case '%':
+			return b%a;
+		}
+		return 0;
+	}
+	
+	public static void evaluate(String h) {
+		for(int i=0;i<=h.length()-1;i++) {//19<=19
+			if(Character.isDigit(h.charAt(i))) {
+				String g="";
+				while(i<=h.length()-1&&Character.isDigit(h.charAt(i))){//18<=19 &&
+					g+=h.charAt(i);//7
+					i++;//19
+				}
+				int y=Integer.parseInt(g);
+				n.push(y);//9,2,3,7
+			}
+			
+			else if('('==h.charAt(i)) {
+				op.push(h.charAt(i));
+			}
+			
+			else if(Character.isSpace(h.charAt(i))) {
+				continue;
+			}
+			
+			else if(')'==h.charAt(i)) {
+				while('('!=op.peek()) {//(!=+
+					 n.push (callsum(n.pop(),op.pop(),n.pop()));
+				}
+				op.pop();
+			}
+			
+			else if('+'==h.charAt(i)||'-'==h.charAt(i)||'*'==h.charAt(i)||'/'==h.charAt(i)||'%'==h.charAt(i)) {
+				while(!op.isEmpty()&&precedence(h.charAt(i))<=precedence(op.peek())) {
+					  n.push (callsum(n.pop(),op.pop(),n.pop()));
+				}
+				op.push(h.charAt(i));
+			}
+			
+		}
+		while(!op.isEmpty()&&!n.isEmpty()) {
+				  n.push (callsum(n.pop(),op.pop(),n.pop()));
+		}
+		System.out.println(n);
+	}
+	
+	public static void main(String [] args1) {
+      evaluate("9 + 2 * ( 6 - 3 + 7 )");
+			
+	}
+}
+	
+
+OUTPUT:
+[29]
